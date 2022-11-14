@@ -4,7 +4,7 @@ import { VideoData, Page, DownloadUrl, Subtitle, Audio, SettingData } from '../a
 import { sleep } from './sleep'
 import { filterTitle } from './filterTitle'
 import { formatSeconed } from './formatSeconed'
-import got from 'got'
+const got = require('got')
 
 let bfeId = ''
 
@@ -81,7 +81,7 @@ const checkLogin = async (SESSDATA: string) => {
       cookie: `SESSDATA=${SESSDATA}`
     },
     responseType: 'json'
-  }).catch(err => {
+  }).catch((err: any) => {
     console.log('checkLogin failed.')
     throw err
   })
@@ -125,7 +125,7 @@ const checkUrlRedirect = async (videoUrl: string, settings: SettingData) => {
       }
     }
   }
-  const { body, redirectUrls } = await got(params.videoUrl, params.config).catch(err => {
+  const { body, redirectUrls } = await got(params.videoUrl, params.config).catch((err: any) => {
     console.log('checkUrlRedirect failed.')
     throw err
   })
@@ -265,7 +265,7 @@ const parseSS = async (html: string, settings: SettingData) => {
         }
       }
     }
-    const { body } = await got(params.url, params.config).catch(err => {
+    const { body } = await got(params.url, params.config).catch((err: any) => {
       console.log('parseSS failed.')
       throw err
     })

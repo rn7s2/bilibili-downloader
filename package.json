@@ -17,7 +17,7 @@
     "ffmpeg-static": "^5.1.0",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^10.1.0",
-    "got": "^12.5.2",
+    "got": "^11.8.2",
     "lodash": "^4.17.21",
     "protobufjs": "^7.1.2",
     "stream": "^0.0.2",
