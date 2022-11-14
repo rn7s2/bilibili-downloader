@@ -81,9 +81,6 @@ const checkLogin = async (SESSDATA: string) => {
       cookie: `SESSDATA=${SESSDATA}`
     },
     responseType: 'json'
-  }).catch((err: any) => {
-    console.log('checkLogin failed.')
-    throw err
   })
   if ((body as any).data.isLogin && !(body as any).data.vipStatus) {
     return 1
@@ -125,10 +122,7 @@ const checkUrlRedirect = async (videoUrl: string, settings: SettingData) => {
       }
     }
   }
-  const { body, redirectUrls } = await got(params.videoUrl, params.config).catch((err: any) => {
-    console.log('checkUrlRedirect failed.')
-    throw err
-  })
+  const { body, redirectUrls } = await got(params.videoUrl, params.config)
   const url = redirectUrls[0] ? redirectUrls[0] : videoUrl
   return {
     body,
@@ -265,10 +259,7 @@ const parseSS = async (html: string, settings: SettingData) => {
         }
       }
     }
-    const { body } = await got(params.url, params.config).catch((err: any) => {
-      console.log('parseSS failed.')
-      throw err
-    })
+    const { body } = await got(params.url, params.config)
     return parseEP(body, params.url, settings)
   } catch (error: any) {
     throw new Error(error)
@@ -288,10 +279,7 @@ const getAcceptQuality = async (cid: string, bvid: string, settings: SettingData
   const { body: { data: { accept_quality, dash: { video, audio } } }, headers: { 'set-cookie': responseCookies } } = (await got(
     `https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&qn=127&type=&otype=json&fourk=1&fnver=0&fnval=80&session=68191c1dc3c75042c6f35fba895d65b0`,
     config as any
-  ) as any).catch((err: any) => {
-    console.error('getAcceptQuality error.')
-    throw err
-  })
+  ) as any)
   // 保存返回的cookies
   saveResponseCookies(responseCookies)
   return {
@@ -316,10 +304,7 @@ const getDownloadUrl = async (cid: number, bvid: string, quality: number, settin
   const { body: { data: { dash } }, headers: { 'set-cookie': responseCookies } } = (await got(
     `https://api.bilibili.com/x/player/playurl?cid=${cid}&bvid=${bvid}&qn=${quality}&type=&otype=json&fourk=1&fnver=0&fnval=80&session=68191c1dc3c75042c6f35fba895d65b0`,
     config as any
-  ) as any).catch((err: any) => {
-    console.error('getDownloadUrl failed.')
-    throw err
-  })
+  ) as any)
   // 保存返回的cookies
   saveResponseCookies(responseCookies)
   return {
@@ -338,10 +323,7 @@ const getSubtitle = async (cid: number, bvid: string, settings: SettingData) => 
     },
     responseType: 'json'
   }
-  const { body: { data: { subtitle } } } = (await got(`https://api.bilibili.com/x/player/v2?cid=${cid}&bvid=${bvid}`, config as any) as any).catch((err: any) => {
-    console.error('getSubtitle error.')
-    throw err
-  })
+  const { body: { data: { subtitle } } } = (await got(`https://api.bilibili.com/x/player/v2?cid=${cid}&bvid=${bvid}`, config as any) as any)
   const subtitleList: Subtitle[] = subtitle.subtitles ? subtitle.subtitles.map((item: any) => ({ title: item.lan_doc, url: item.subtitle_url })) : []
   return subtitleList
 }

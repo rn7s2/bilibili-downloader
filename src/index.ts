@@ -5,7 +5,7 @@ import { sleep } from './utils/sleep'
 import downloadVideo from './utils/download'
 
 let settings: SettingData = {
-  downloadPath: './downloads/',
+  downloadPath: './downloads',
   SESSDATA: '',
   isMerge: true,
   isDelete: true,
@@ -15,7 +15,11 @@ let settings: SettingData = {
   isFolder: true,
   isCover: true,
   downloadingMaxSize: 1
-}
+};
+
+(async () => {
+  await download('https://www.bilibili.com/video/BV1zW4y1J7Jn')
+})()
 
 async function download (videoUrl: string) {
   await parseVideoUrl(videoUrl)
@@ -76,13 +80,14 @@ const handleDownload = async (videoInfo: VideoData, selected: number[], quality:
 
   list.forEach(async (video) => {
     // 引入斐波那契数列重试等待时间
-    let lastWait = 0
-    let wait = 1
+    let lastWait = 3
+    let wait = 5
     while (true) {
       try {
         await downloadVideo(video, settings)
       } catch (_) {
-        await sleep(wait * 60)
+        console.log(`重试等待: ${wait} 秒`)
+        await sleep(wait * 1000)
         const tmp = lastWait + wait
         lastWait = wait
         wait = tmp
