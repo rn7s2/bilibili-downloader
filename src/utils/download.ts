@@ -108,7 +108,7 @@ export default async (videoInfo: VideoData, setting: SettingData) => {
   await sleep(500)
   // 合成视频
   if (setting.isMerge) {
-    mergeVideoAudio(
+    await mergeVideoAudio(
       videoInfo.filePathList[2],
       videoInfo.filePathList[3],
       videoInfo.filePathList[0]

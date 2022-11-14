@@ -47,7 +47,6 @@ const formatSeconds = (value: number) => {
 const createFile = (path: string, data: string) => {
   fs.writeFile(path, data, { encoding: 'utf8' }, (err: any) => {
     if (!err) {
-      console.log('success')
     }
   })
 }

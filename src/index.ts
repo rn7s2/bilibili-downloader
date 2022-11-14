@@ -3,6 +3,7 @@ import { SettingData, VideoData } from './assets/type'
 import { checkUrl, checkUrlRedirect, getDownloadList, parseHtml } from './utils/bilibili'
 import { sleep } from './utils/sleep'
 import downloadVideo from './utils/download'
+import fs from 'fs-extra'
 
 let settings: SettingData = {
   downloadPath: './downloads',
@@ -17,12 +18,7 @@ let settings: SettingData = {
   downloadingMaxSize: 1
 };
 
-(async () => {
-  await download('https://www.bilibili.com/video/BV1zW4y1J7Jn')
-  await download('https://www.bilibili.com/video/BV18V4y1372X')
-})()
-
-async function download (videoUrl: string) {
+export default async function download (videoUrl: string) {
   await parseVideoUrl(videoUrl)
 }
 
@@ -77,15 +73,19 @@ async function prepareDownload (data: VideoData) {
 const handleDownload = async (videoInfo: VideoData, selected: number[], quality: number) => {
   // 获取当前选中视频的下载数据
   const list = await getDownloadList(videoInfo, selected, quality, settings)
-  console.log(list)
 
-  list.forEach(async (video) => {
+  for (let i = 0; i < list.length; i++) {
+    if (fs.existsSync(list[i].filePathList[0]) && fs.existsSync(list[i].filePathList[1]) && fs.existsSync(list[i].filePathList[0].replace('.mp4', '.ass'))) {
+      console.info('视频已下载，跳过')
+      continue
+    }
+
     // 引入斐波那契数列重试等待时间
     let lastWait = 3
     let wait = 5
     while (true) {
       try {
-        await downloadVideo(video, settings)
+        await downloadVideo(list[i], settings)
         lastWait = 3
         wait = 5
         break
@@ -97,5 +97,5 @@ const handleDownload = async (videoInfo: VideoData, selected: number[], quality:
         wait = tmp
       }
     }
-  })
+  }
 }

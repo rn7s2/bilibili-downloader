@@ -65,7 +65,6 @@ const getDownloadList = async (videoInfo: VideoData, selected: number[], quality
 const saveResponseCookies = (cookies: string[]) => {
   if (cookies && cookies.length) {
     const cookiesString = cookies.join(';')
-    console.log('bfe: ', cookiesString)
     bfeId = cookiesString
   }
 }
@@ -186,8 +185,6 @@ const parseBV = async (html: string, url: string, settings: SettingData) => {
       size: -1,
       downloadUrl: { video: '', audio: '' }
     }
-    console.log('bv')
-    console.log(obj)
     return obj
   } catch (error: any) {
     throw new Error(error)
@@ -237,8 +234,6 @@ const parseEP = async (html: string, url: string, settings: SettingData) => {
       size: -1,
       downloadUrl: { video: '', audio: '' }
     }
-    console.log('ep')
-    console.log(obj)
     return obj
   } catch (error: any) {
     throw new Error(error)
