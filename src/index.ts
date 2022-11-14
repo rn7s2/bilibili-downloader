@@ -19,6 +19,7 @@ let settings: SettingData = {
 
 (async () => {
   await download('https://www.bilibili.com/video/BV1zW4y1J7Jn')
+  await download('https://www.bilibili.com/video/BV18V4y1372X')
 })()
 
 async function download (videoUrl: string) {
@@ -85,6 +86,9 @@ const handleDownload = async (videoInfo: VideoData, selected: number[], quality:
     while (true) {
       try {
         await downloadVideo(video, settings)
+        lastWait = 3
+        wait = 5
+        break
       } catch (_) {
         console.log(`重试等待: ${wait} 秒`)
         await sleep(wait * 1000)

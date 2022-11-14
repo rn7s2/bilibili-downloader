@@ -2,6 +2,7 @@ import { fixed } from './utils/fixed'
 import { DanmakuType } from './danmaku-type'
 import { Resolution, Duration, FontStyles } from './ass-danmaku'
 import { Danmaku } from './danmaku-data'
+import { Canvas } from 'canvas'
 
 interface TrackItem {
   start: number
@@ -50,7 +51,7 @@ export class DanmakuStack {
   danmakuHeight: number
   trackHeight: number
   trackCount: number
-  constructor (
+  constructor(
     font: string,
     resolution: Resolution,
     duration: Duration,
@@ -62,7 +63,7 @@ export class DanmakuStack {
     this.verticalTrack = []
     this.resolution = resolution
     this.duration = duration
-    this.context = document.createElement('canvas').getContext('2d')
+    this.context = new Canvas(resolution.x, resolution.y).getContext('2d')
     this.danmakuHeight = 0
     this.trackHeight = 0
     this.trackCount = 0
@@ -202,25 +203,25 @@ export class DanmakuStack {
     switch (DanmakuStack.danmakuType[danmaku.type]) {
       case 'normal':
       case 'reversed': // 反向先鸽了, 直接当正向了
-      {
-        tags = this.getHorizontalTags(danmaku)
-        stack = this.horizontalStack
-        break
-      }
+        {
+          tags = this.getHorizontalTags(danmaku)
+          stack = this.horizontalStack
+          break
+        }
       case 'top':
       case 'bottom':
-      {
-        tags = this.getVerticalTags(danmaku)
-        stack = this.verticalStack
-        break
-      }
+        {
+          tags = this.getVerticalTags(danmaku)
+          stack = this.verticalStack
+          break
+        }
       case 'special': // 高级弹幕也鸽了先
       default:
-      {
-        return {
-          tags: '\\pos(0,-999)'
+        {
+          return {
+            tags: '\\pos(0,-999)'
+          }
         }
-      }
     }
     const info = {
       tags
